@@ -23,6 +23,7 @@ public class TodoService {
         // title, todoOrder, completed 정보 업데이트
         Optional.ofNullable(todo.getTitle()).ifPresent(title -> verifiedTodo.setTitle(title));
         Optional.ofNullable(todo.getTodoOrder()).ifPresent(todoOrder -> verifiedTodo.setTodoOrder(todoOrder));
+        Optional.ofNullable(todo.isCompleted()).ifPresent(completed -> verifiedTodo.setCompleted(completed));
         return todoRepository.save(verifiedTodo);
     }
 
