@@ -1,40 +1,47 @@
 package com.taebong98.todo.Todo.App.service;
 
 import com.taebong98.todo.Todo.App.entity.Todo;
+import com.taebong98.todo.Todo.App.respository.TodoRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class TodoService {
-    public Todo createTodo(Todo todo) {
-        // todo 객체는 나중에 DB 저장 후 되돌려 받는 것으로 변경 필요
-        Todo createdTodo = todo;
+    private final TodoRepository todoRepository;
 
-        return createdTodo;
+    public Todo createTodo(Todo todo) {
+        return todoRepository.save(todo);
     }
 
-    public Todo updateTodo(Todo todo) {
-        // todo 객체는 나중에 DB 저장 후 되돌려 받는 것으로 변경 필요
-        Todo updatedTodo = new Todo(1L, "운동하기", 1, false);
-        return updatedTodo;
+    public Todo updateTodo(Todo todo, long todoId) {
+        // 존재하는 todo 리스트인지 검증한다
+        Todo verifiedTodo = findVerifiedTodo(todoId);
+        // title, todoOrder, completed 정보 업데이트
+        Optional.ofNullable(todo.getTitle()).ifPresent(title -> verifiedTodo.setTitle(title));
+        Optional.ofNullable(todo.getTodoOrder()).ifPresent(todoOrder -> verifiedTodo.setTodoOrder(todoOrder));
+        return todoRepository.save(verifiedTodo);
     }
 
     public Todo findTodo(long todoId) {
-        Todo todo = new Todo(todoId, "운동하기", 1, false);
-        return todo;
+        return findVerifiedTodo(todoId);
     }
 
     public List<Todo> findTodos() {
-        List<Todo> todos = List.of(
-                new Todo(1L, "운동하기", 1, false),
-                new Todo(2L, "공부하기", 2, true)
-        );
-        return todos;
+        return (List<Todo>) todoRepository.findAll();
     }
 
     public void deleteTodo(long todoId) {
-        // should business logic
+        Todo findTodo = findVerifiedTodo(todoId);
+        todoRepository.delete(findTodo);
     }
 
+    private Todo findVerifiedTodo(long todoId) {
+        Optional<Todo> optionalTodo = todoRepository.findById(todoId);
+        Todo findTodo = optionalTodo.orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
+        return findTodo;
+    }
 }

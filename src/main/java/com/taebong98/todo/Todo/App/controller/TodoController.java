@@ -34,7 +34,8 @@ public class TodoController {
     @PatchMapping("{todos-id}")
     public ResponseEntity patchTodo(@Positive @PathVariable("todos-id") long todoId,
                                     @Valid @RequestBody TodoPatchDto todoPatchDto) {
-        Todo response = todoService.updateTodo(mapper.todoPatchDtoToTodo(todoPatchDto));
+
+        Todo response = todoService.updateTodo(mapper.todoPatchDtoToTodo(todoPatchDto), todoId);
         return new ResponseEntity(mapper.todoToTodoResponseDto(response), HttpStatus.OK);
     }
 
@@ -58,8 +59,7 @@ public class TodoController {
 
     @DeleteMapping("{todos-id}")
     public ResponseEntity deleteTodo(@Positive @PathVariable("todos-id") long todoId) {
-        // TODO should Business logic
-
+        todoService.deleteTodo(todoId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
