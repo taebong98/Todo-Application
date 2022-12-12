@@ -39,6 +39,10 @@ public class TodoService {
         todoRepository.delete(findTodo);
     }
 
+    public void deleteTodos() {
+        todoRepository.deleteAll();
+    }
+
     private Todo findVerifiedTodo(long todoId) {
         Optional<Todo> optionalTodo = todoRepository.findById(todoId);
         Todo findTodo = optionalTodo.orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));

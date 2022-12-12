@@ -63,5 +63,10 @@ public class TodoController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @DeleteMapping
+    public ResponseEntity deleteTodo() {
+        todoService.deleteTodos();
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 
 }
