@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("v1/todos")
+@RequestMapping("/")
 public class TodoController {
     private final TodoService todoService;
     private final TodoMapper mapper;
